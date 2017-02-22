@@ -14,7 +14,7 @@ namespace WebApi.Controllers
         // GET: api/Sms/5
         public void Get(int id)
         {
-            SmsService.sendSms("");
+            SmsService.sendSms("79997455142","Hello");
         }
 
         // POST: api/Sms
