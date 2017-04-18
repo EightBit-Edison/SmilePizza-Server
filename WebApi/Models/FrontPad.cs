@@ -32,9 +32,10 @@ namespace WebApi.Models
             request2.Headers.Add("X-Requested-With", "XMLHttpRequest");
             request2.UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
             request2.Referer = "https://app.frontpad.ru/";
-            request2.Headers.Add("Cookie", "_ym_uid=1487161313566199117; _ym_isad=2; PHPSESSID=vmiaj7qlmanq2ev64nuca06p43");
+            request2.Headers.Add("Cookie", "_ym_uid=1488403662144298347; PHPSESSID=n8qk9p7rc9dvimquaslkma6lg6; _ym_isad=2");
             request2.Method = "POST";
             string postData = "datetime1="+ current.ToString(@"dd.MM.yyyy HH:mm:ss")+ "& datetime2=" + next.ToString(@"dd.MM.yyyy HH:mm:ss") + "&filter_waiter=" + user+"&filter_status=" + filter + "&&filter_point=0,0&filter_pay=0&step=100&num=0";
+            //string postData = "datetime1=22.02.2017 01:00:00& datetime2=23.02.2017 00:59:59&filter_waiter=" + user + "&filter_status=" + filter + "&&filter_point=0,0&filter_pay=0&step=100&num=0";
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
             request2.ContentType = "application/x-www-form-urlencoded";
             request2.ContentLength = byteArray.Length;

@@ -14,12 +14,15 @@ namespace WebApi
 
         public int driver { get; set; }
 
-        [Required]
+        
         [StringLength(50)]
         public string longitude { get; set; }
 
-        [Required]
+        
         [StringLength(50)]
         public string lattitude { get; set; }
+
+        
+        public DateTime tracktime { get; set; }
     }
 }

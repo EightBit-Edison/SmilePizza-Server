@@ -14,14 +14,14 @@ namespace WebApi.Models
         public string number;
         public string address;
         public string phone;
-        private async void CloseOrder(string order)
+        public static void CloseOrder(string order)
         {
             string sURL = "https://app.frontpad.ru/blocks/function/status.php";
             HttpWebRequest request2 = (HttpWebRequest)WebRequest.Create(new Uri(sURL));
             request2.Headers.Add("X-Requested-With", "XMLHttpRequest");
             request2.UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko";
             request2.Referer = "https://app.frontpad.ru/";
-            request2.Headers.Add("Cookie", "_ym_uid=1487161313566199117; _ym_isad=2; PHPSESSID=vmiaj7qlmanq2ev64nuca06p43");
+            request2.Headers.Add("Cookie", "_ym_uid=1488403662144298347; PHPSESSID=n8qk9p7rc9dvimquaslkma6lg6; _ym_isad=2");
             request2.Method = "POST";
             string postData = "status=10&orderID="+order;
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);

@@ -5,23 +5,18 @@ namespace WebApi
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class CModel : DbContext
+    public partial class DBModel : DbContext
     {
-        public CModel()
-            : base("name=CModel")
+        public DBModel()
+            : base("name=DBModel")
         {
         }
 
-        public virtual DbSet<Driver> Driver { get; set; }
-        public virtual DbSet<Geoposition> Geoposition { get; set; }
-        
+        public virtual DbSet<Geoposition> Geopositions { get; set; }
+        public virtual DbSet<Sm> Sms { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Driver>()
-                .Property(e => e.password)
-                .IsUnicode(false);
-
             modelBuilder.Entity<Geoposition>()
                 .Property(e => e.longitude)
                 .IsUnicode(false);
@@ -30,6 +25,9 @@ namespace WebApi
                 .Property(e => e.lattitude)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<Sm>()
+                .Property(e => e.phone)
+                .IsUnicode(false);
         }
     }
 }

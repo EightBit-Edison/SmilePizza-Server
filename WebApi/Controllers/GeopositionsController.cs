@@ -6,7 +6,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApi;
@@ -15,19 +14,24 @@ namespace WebApi.Controllers
 {
     public class GeopositionsController : ApiController
     {
-        private CModel db = new CModel();
+        private DBModel db = new DBModel();
 
         // GET: api/Geopositions
-        public IQueryable<Geoposition> GetGeoposition()
+        public IQueryable<Geoposition> GetGeopositions()
         {
-            return db.Geoposition;
+			var res = from element in db.Geopositions
+					  group element by element.driver
+				  into groups
+					  select groups.OrderByDescending(p => p.tracktime).FirstOrDefault();
+			//var l = db.Geopositions.OrderByDescending(x => x.tracktime).GroupBy(x => x.driver).Select();
+            return res;
         }
 
         // GET: api/Geopositions/5
         [ResponseType(typeof(Geoposition))]
-        public async Task<IHttpActionResult> GetGeoposition(Guid id)
+        public IHttpActionResult GetGeoposition(Guid id)
         {
-            Geoposition geoposition = await db.Geoposition.FindAsync(id);
+            Geoposition geoposition = db.Geopositions.Find(id);
             if (geoposition == null)
             {
                 return NotFound();
@@ -38,7 +42,7 @@ namespace WebApi.Controllers
 
         // PUT: api/Geopositions/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutGeoposition(Guid id, Geoposition geoposition)
+        public IHttpActionResult PutGeoposition(Guid id, Geoposition geoposition)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +58,7 @@ namespace WebApi.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,18 +77,22 @@ namespace WebApi.Controllers
 
         // POST: api/Geopositions
         [ResponseType(typeof(Geoposition))]
-        public async Task<IHttpActionResult> PostGeoposition(Geoposition geoposition)
+        public IHttpActionResult PostGeoposition(Geoposition geoposition)
         {
+            geoposition.geoid = Guid.NewGuid();
+            geoposition.lattitude = geoposition.lattitude.Replace(",", ".");
+            geoposition.longitude = geoposition.longitude.Replace(",", ".");
+            geoposition.tracktime = DateTime.Now;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Geoposition.Add(geoposition);
+            db.Geopositions.Add(geoposition);
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -103,16 +111,16 @@ namespace WebApi.Controllers
 
         // DELETE: api/Geopositions/5
         [ResponseType(typeof(Geoposition))]
-        public async Task<IHttpActionResult> DeleteGeoposition(Guid id)
+        public IHttpActionResult DeleteGeoposition(Guid id)
         {
-            Geoposition geoposition = await db.Geoposition.FindAsync(id);
+            Geoposition geoposition = db.Geopositions.Find(id);
             if (geoposition == null)
             {
                 return NotFound();
             }
 
-            db.Geoposition.Remove(geoposition);
-            await db.SaveChangesAsync();
+            db.Geopositions.Remove(geoposition);
+            db.SaveChanges();
 
             return Ok(geoposition);
         }
@@ -128,7 +136,7 @@ namespace WebApi.Controllers
 
         private bool GeopositionExists(Guid id)
         {
-            return db.Geoposition.Count(e => e.geoid == id) > 0;
+            return db.Geopositions.Count(e => e.geoid == id) > 0;
         }
     }
 }
